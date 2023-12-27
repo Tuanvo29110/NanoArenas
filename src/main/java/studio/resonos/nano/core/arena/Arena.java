@@ -8,10 +8,12 @@ import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.world.block.BaseBlock;
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockState;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
 import studio.resonos.nano.NanoArenas;
 import studio.resonos.nano.core.arena.impl.StandaloneArena;
@@ -33,6 +35,8 @@ public class Arena extends Cuboid {
     private static final List<Arena> arenas = new ArrayList<>();
     @Getter
     private static final List<String> arenaNames = new ArrayList<>();
+
+    @Getter private static final List<Entity> entities = new ArrayList<>();
     /*
      * Arena metadata
      * */
@@ -239,6 +243,11 @@ public class Arena extends Cuboid {
 				editSession.flushQueue();
 				this.getChangedBlocks().clear();
 			}*/
+            for (Entity entity: getEntities()) {
+                if (Bukkit.getWorld(this.getWorld().getName()).getEntities().contains(entity)) {
+                    entity.remove();
+                }
+            }
             this.getChangedBlocks().clear();
             long setupEndTime = System.currentTimeMillis();
             long durationSetup = setupEndTime - setupTime;

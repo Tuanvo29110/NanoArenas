@@ -12,6 +12,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import studio.resonos.nano.core.arena.selection.Selection;
@@ -98,6 +99,15 @@ public class ArenaListener implements Listener {
         for (Arena arena : Arena.getArenas()) {
             if (arena.contains(loc)) {
                 arena.getPlacedBlocks().remove(event.getBlock().getLocation());
+            }
+        }
+    }
+
+    @EventHandler
+    public void onEntitySpawn(EntitySpawnEvent event) {
+        for (Arena arena : Arena.getArenas()) {
+            if (arena.contains(event.getEntity().getLocation())) {
+                arena.getEntities().add(event.getEntity());
             }
         }
     }
