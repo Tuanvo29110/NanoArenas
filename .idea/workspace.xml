@@ -4,13 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f7c8cbbd-3eb4-4853-89db-fd24be48b738" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/studio/resonos/nano/core/util/BasicConfigurationFile.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/config.yml" afterDir="false" />
+    <list default="true" id="f7c8cbbd-3eb4-4853-89db-fd24be48b738" name="Changes" comment="Moments before disaster&#10;&#10;jokes apart fix licensing">
+      <change afterPath="$PROJECT_DIR$/src/main/java/studio/resonos/nano/core/util/Config.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/libs/Nano" beforeDir="false" afterPath="$PROJECT_DIR$/libs/Nano" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/studio/resonos/nano/NanoArenas.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/studio/resonos/nano/NanoArenas.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/studio/resonos/nano/core/util/BasicConfigurationFile.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -125,11 +124,24 @@
       <workItem from="1703772200145" duration="597000" />
       <workItem from="1703863030578" duration="846000" />
       <workItem from="1703864203152" duration="1129000" />
-      <workItem from="1704030241818" duration="4450000" />
+      <workItem from="1704030241818" duration="6304000" />
     </task>
+    <task id="LOCAL-00001" summary="Moments before disaster&#10;&#10;jokes apart fix licensing">
+      <option name="closed" value="true" />
+      <created>1704038999819</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1704038999819</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Moments before disaster&#10;&#10;jokes apart fix licensing" />
+    <option name="LAST_COMMIT_MESSAGE" value="Moments before disaster&#10;&#10;jokes apart fix licensing" />
   </component>
 </project>

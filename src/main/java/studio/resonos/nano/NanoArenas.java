@@ -3,6 +3,7 @@ package studio.resonos.nano;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import studio.resonos.nano.api.command.CommandHandler;
@@ -10,6 +11,7 @@ import studio.resonos.nano.api.gui.SpiGUI;
 import studio.resonos.nano.core.arena.Arena;
 import studio.resonos.nano.core.arena.ArenaListener;
 import studio.resonos.nano.core.util.CC;
+import studio.resonos.nano.core.util.Config;
 import studio.resonos.nano.core.util.file.type.BasicConfigurationFile;
 
 import java.io.BufferedReader;
@@ -34,7 +36,8 @@ public class NanoArenas extends JavaPlugin {
     public static SpiGUI spiGUI;
     private static NanoArenas nanoArenas;
     @Getter
-    private BasicConfigurationFile arenasConfig,mainConfig;
+    private BasicConfigurationFile arenasConfig;
+    public Config mainConfig;
 
 
     public static NanoArenas get() {
@@ -43,8 +46,6 @@ public class NanoArenas extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        mainConfig=new BasicConfigurationFile(this,"config");
-        String licenseKey=mainConfig.getString("CONFIG.LICENSE_KEY");
         final String apiURL = "http://license.java.api.resonos.studio:3000/api/client";
         final String apiKey = "hjVfr{J&M2q{gRtdytnHvs-Sd#voJe;d%Jl(yLbjbhK~F~4C&6";
         final String product = "NanoArenas";
