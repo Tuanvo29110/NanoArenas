@@ -19,7 +19,7 @@ public class NanoCommand {
         sender.sendMessage(CC.translate(" &fThis server is running &bNano. A lightning fast Arena system"));
         sender.sendMessage(CC.translate(" &fmade for Large scale maps and servers."));
         sender.sendMessage(" ");
-        sender.sendMessage(CC.translate(" &fDeveloped by &bResonos Studios &f[&bdiscord.gg/7yYQugXPm3&f]"));
+        sender.sendMessage(CC.translate(" &fDeveloped by &bResonos Studios &f[&bdsc.gg/resonos&f]"));
         sender.sendMessage(CC.CHAT_BAR);
     }
 }
