@@ -14,13 +14,6 @@ import studio.resonos.nano.core.util.CC;
 import studio.resonos.nano.core.util.Config;
 import studio.resonos.nano.core.util.file.type.BasicConfigurationFile;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.Collections;
 
 /**
@@ -99,12 +92,13 @@ public class NanoArenas extends JavaPlugin {
     }
 
     private void registerProcessors() {
-        CommandHandler.registerProcessors("studio.resonos.arenas.api.command.processors", this);
+        CommandHandler.registerProcessors("studio.resonos.nano.api.command.processors", this);
     }
 
     private void registerCommands() {
-        CommandHandler.registerCommands("studio.resonos.arenas.core.commands.arena", this);
-        CommandHandler.registerCommands("studio.resonos.arenas.core.commands.dev", this);
+        CommandHandler.registerCommands("studio.resonos.nano.core.commands.arena", this);
+        CommandHandler.registerCommands("studio.resonos.nano.core.commands.dev", this);
+        System.out.println("Registered Commands");
     }
 
     private void scheduleArenaResets() {

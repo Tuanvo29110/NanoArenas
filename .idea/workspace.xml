@@ -4,29 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f7c8cbbd-3eb4-4853-89db-fd24be48b738" name="Changes" comment="gitignore">
-      <change beforePath="$PROJECT_DIR$/.idea/discord.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/discord.xml" afterDir="false" />
+    <list default="true" id="f7c8cbbd-3eb4-4853-89db-fd24be48b738" name="Changes" comment="will this fix?">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/libs/Nano" beforeDir="false" afterPath="$PROJECT_DIR$/libs/Nano" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/studio/resonos/nano/NanoArenas.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/studio/resonos/nano/NanoArenas.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/studio/resonos/nano/api/command/processors/ArenaProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/studio/resonos/nano/api/command/processors/ArenaProcessor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/studio/resonos/nano/core/arena/menu/ArenaManagementMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/studio/resonos/nano/core/arena/menu/ArenaManagementMenu.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/studio/resonos/nano/core/commands/arena/ArenaCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/studio/resonos/nano/core/commands/arena/ArenaCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/studio/resonos/nano/core/commands/arena/ArenaCreateCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/studio/resonos/nano/core/commands/arena/ArenaCreateCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/studio/resonos/nano/core/commands/arena/ArenaDeleteCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/studio/resonos/nano/core/commands/arena/ArenaDeleteCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/studio/resonos/nano/core/commands/arena/ArenaInfoCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/studio/resonos/nano/core/commands/arena/ArenaInfoCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/studio/resonos/nano/core/commands/arena/ArenaManageCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/studio/resonos/nano/core/commands/arena/ArenaManageCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/studio/resonos/nano/core/commands/arena/ArenaResetCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/studio/resonos/nano/core/commands/arena/ArenaResetCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/studio/resonos/nano/core/commands/arena/ArenaResetTimeCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/studio/resonos/nano/core/commands/arena/ArenaResetTimeCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/studio/resonos/nano/core/commands/arena/ArenaSaveCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/studio/resonos/nano/core/commands/arena/ArenaSaveCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/studio/resonos/nano/core/commands/arena/ArenaSelectionCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/studio/resonos/nano/core/commands/arena/ArenaSelectionCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/studio/resonos/nano/core/commands/arena/ArenaSetIconCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/studio/resonos/nano/core/commands/arena/ArenaSetIconCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/studio/resonos/nano/core/commands/arena/ArenaSetSpawnCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/studio/resonos/nano/core/commands/arena/ArenaSetSpawnCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/studio/resonos/nano/core/commands/arena/ArenaTeleportCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/studio/resonos/nano/core/commands/arena/ArenaTeleportCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/studio/resonos/nano/core/commands/arena/ArenasCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/studio/resonos/nano/core/commands/arena/ArenasCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/studio/resonos/nano/core/commands/dev/NanoCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/studio/resonos/nano/core/commands/dev/NanoCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/plugin.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/plugin.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,6 +39,9 @@
 }]]></component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 5
@@ -158,7 +143,7 @@
       <workItem from="1703863030578" duration="846000" />
       <workItem from="1703864203152" duration="1129000" />
       <workItem from="1704030241818" duration="6304000" />
-      <workItem from="1738248840691" duration="1372000" />
+      <workItem from="1738248840691" duration="2355000" />
     </task>
     <task id="LOCAL-00001" summary="Moments before disaster&#10;&#10;jokes apart fix licensing">
       <option name="closed" value="true" />
@@ -184,7 +169,31 @@
       <option name="project" value="LOCAL" />
       <updated>1738249497923</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="git change">
+      <option name="closed" value="true" />
+      <created>1738250240300</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1738250240300</updated>
+    </task>
+    <task id="LOCAL-00005" summary="target">
+      <option name="closed" value="true" />
+      <created>1738250321555</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1738250321555</updated>
+    </task>
+    <task id="LOCAL-00006" summary="will this fix?">
+      <option name="closed" value="true" />
+      <created>1738250505100</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1738250505101</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -194,6 +203,9 @@
     <MESSAGE value="Moments before disaster&#10;&#10;jokes apart fix licensing" />
     <MESSAGE value="remove license temporarily&#10;make it 1.21.4" />
     <MESSAGE value="gitignore" />
-    <option name="LAST_COMMIT_MESSAGE" value="gitignore" />
+    <MESSAGE value="git change" />
+    <MESSAGE value="target" />
+    <MESSAGE value="will this fix?" />
+    <option name="LAST_COMMIT_MESSAGE" value="will this fix?" />
   </component>
 </project>
