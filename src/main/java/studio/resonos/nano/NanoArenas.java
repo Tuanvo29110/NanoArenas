@@ -104,6 +104,7 @@ public class NanoArenas extends JavaPlugin {
 
     private void registerCommands() {
         CommandHandler.registerCommands("studio.resonos.arenas.core.commands.arena", this);
+        CommandHandler.registerCommands("studio.resonos.arenas.core.commands.dev", this);
     }
 
     private void scheduleArenaResets() {
