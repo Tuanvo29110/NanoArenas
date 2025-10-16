@@ -1,12 +1,8 @@
-
 package studio.resonos.nano.core.arena.schedule;
 
-import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
-import studio.resonos.nano.api.event.ArenaResetEvent;
 import studio.resonos.nano.core.arena.Arena;
-
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -48,7 +44,10 @@ public class ArenaResetScheduler {
             return;
         }
 
-        AtomicInteger remaining = new AtomicInteger(resetSeconds);
+        // Capture the configured seconds once to avoid mutations caused by arena.reset()
+        final int configuredSeconds = Math.max(1, resetSeconds);
+
+        AtomicInteger remaining = new AtomicInteger(configuredSeconds);
         remainingSeconds.put(arena.getName(), remaining);
 
         int taskId = new BukkitRunnable() {
@@ -57,28 +56,24 @@ public class ArenaResetScheduler {
                 try {
                     AtomicInteger rem = remainingSeconds.get(arena.getName());
                     if (rem == null) return; // cancelled meanwhile
+
+                    // If the arena has auto-reset paused, freeze the countdown (do not decrement)
+                    if (arena.isAutoResetPaused()) {
+                        return;
+                    }
+
                     int value = rem.decrementAndGet();
                     if (value <= 0) {
                         try {
-                            // fire cancellable event BEFORE performing the reset
-                            ArenaResetEvent event = new ArenaResetEvent(arena);
-                            Bukkit.getServer().getPluginManager().callEvent(event);
-
-                            if (event.isCancelled()) {
-                                plugin.getLogger().info("Auto-reset cancelled for arena " + arena.getName());
-                                int configured = Math.max(1, arena.getResetTime());
-                                rem.set(configured);
-                            } else {
-                                plugin.getLogger().info("Auto-resetting arena " + arena.getName());
-                                arena.reset();
-                                int configured = Math.max(1, arena.getResetTime());
-                                rem.set(configured);
-                            }
+                            plugin.getLogger().info("Auto-resetting arena " + arena.getName());
+                            // Arena.reset() handles firing events and measuring duration.
+                            arena.reset();
+                            // reload the captured configured seconds
+                            rem.set(configuredSeconds);
                         } catch (Exception e) {
                             plugin.getLogger().severe("Failed to reset arena " + arena.getName() + ": " + e.getMessage());
                             e.printStackTrace();
-                            int configured = Math.max(1, arena.getResetTime());
-                            rem.set(configured);
+                            rem.set(configuredSeconds);
                         }
                     }
                 } catch (Exception e) {

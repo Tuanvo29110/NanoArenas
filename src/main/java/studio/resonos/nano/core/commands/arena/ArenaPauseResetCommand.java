@@ -1,0 +1,49 @@
+package studio.resonos.nano.core.commands.arena;
+
+import org.bukkit.entity.Player;
+import studio.resonos.nano.NanoArenas;
+import studio.resonos.nano.api.command.Command;
+import studio.resonos.nano.api.command.paramter.Param;
+import studio.resonos.nano.core.arena.Arena;
+import studio.resonos.nano.core.util.CC;
+
+
+public class ArenaPauseResetCommand {
+
+    @Command(names = {"arena pause"}, permission = "nano.arena", playerOnly = true)
+    public void Command(Player player, @Param(name = "arena") Arena arena, @Param(name = "action", required = false) String action) {
+        if (arena == null) {
+            player.sendMessage(CC.RED + "An arena with that name does not exist.");
+            return;
+        }
+
+        // default = toggle
+        if (action == null || action.equalsIgnoreCase("toggle")) {
+            boolean next = !arena.isAutoResetPaused();
+            arena.setAutoResetPaused(next);
+            arena.save();
+            NanoArenas.get().getResetScheduler().schedule(arena);
+            player.sendMessage(next ? CC.GREEN + "Auto-resets paused for arena " + arena.getName() + "." :
+                    CC.BLUE + "Auto-resets resumed for arena " + arena.getName() + ".");
+            return;
+        }
+
+        if (action.equalsIgnoreCase("on")) {
+            arena.setAutoResetPaused(true);
+            arena.save();
+            NanoArenas.get().getResetScheduler().schedule(arena);
+            player.sendMessage(CC.GREEN + "Auto-resets paused for arena " + arena.getName() + ".");
+            return;
+        }
+
+        if (action.equalsIgnoreCase("off")) {
+            arena.setAutoResetPaused(false);
+            arena.save();
+            NanoArenas.get().getResetScheduler().schedule(arena);
+            player.sendMessage(CC.BLUE + "Auto-resets resumed for arena " + arena.getName() + ".");
+            return;
+        }
+
+        player.sendMessage(CC.RED + "Usage: /arena pause <arena> [on|off|toggle]");
+    }
+}

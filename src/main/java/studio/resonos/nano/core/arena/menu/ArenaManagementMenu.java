@@ -32,12 +32,13 @@ public class ArenaManagementMenu {
                     .name("&9&l" + arena.getName())
                     .lore("")
                     .lore("&bArena Information:")
-                    .lore("   &fType: &b" + arena.getType().toString())
                     .lore("   &fIs Setup: &b" + (arena.isSetup() ? "&a✓" : "&c✗"))
                     .lore("   &fResetDelay: &b" + arena.getResetTime() + "s")
+                    .lore("   &fNext Reset: &b" + NanoArenas.get().getResetScheduler().getRemainingSeconds(arena) + "s")
+                    .lore("   &fStatus: &b" + (!arena.isAutoResetPaused() ? "&aAUTO" : "&cPAUSED"))
                     .lore("")
                     .lore("&b&lLEFT-CLICK &bto teleport to arena.")
-                    .lore("&b&lRIGHT-CLICK &bto see arena status.")
+                    .lore("&b&lRIGHT-CLICK &bto pause auto-resets.")
                     .lore("&b&lMIDDLE-CLICK &bto delete arena.")
                     .build())
                     .withListener((InventoryClickEvent click) -> {
@@ -46,10 +47,12 @@ public class ArenaManagementMenu {
                                 player.performCommand("arena teleport " + arena.getName());
                                 break;
                             case RIGHT:
-                                player.performCommand("arena info " + arena.getName());
+                                player.performCommand("arena pause " + arena.getName());
+                                player.performCommand("arena manage");
                                 break;
                             case MIDDLE:
                                 player.performCommand("arena delete " + arena.getName());
+                                player.performCommand("arena manage");
                                 break;
                         }
                     }));

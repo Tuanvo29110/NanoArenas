@@ -20,6 +20,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
 import studio.resonos.nano.NanoArenas;
+import studio.resonos.nano.api.event.ArenaResetEvent;
 import studio.resonos.nano.core.arena.impl.StandaloneArena;
 import studio.resonos.nano.core.arena.selection.Schematic;
 import studio.resonos.nano.core.util.CC;
@@ -57,6 +58,11 @@ public class Arena extends Cuboid {
     @Getter
     @Setter
     protected int resetTime = -1;
+
+    @Getter
+    @Setter
+    private boolean autoResetPaused = false;
+
     @Getter
     @Setter
     private List<String> kits = new ArrayList<>();
@@ -126,13 +132,18 @@ public class Arena extends Cuboid {
     }
 
     public static Material getRandomMaterial() {
-        // Add all possible materials to the array
-        Material[] materials = Material.values();
-
-        // Get a random material from the array
-        Random random = new Random();
-        return materials[random.nextInt(materials.length)];
+        List<Material> valid = new ArrayList<>();
+        for (Material m : Material.values()) {
+            if (m != Material.AIR && m.isItem()) {
+                valid.add(m);
+            }
+        }
+        if (valid.isEmpty()) {
+            return Material.STONE; // safe fallback
+        }
+        return valid.get(new Random().nextInt(valid.size()));
     }
+
 
     public static boolean isIconUnique(Material icon) {
         // Check if the given icon is unique among all arenas
@@ -235,11 +246,12 @@ public class Arena extends Cuboid {
 
                 Schematic schematic = getSchematic();
                 schematic.paste(getWorld(), getSpawn().getBlockX(), getSpawn().getBlockY(), getSpawn().getBlockZ());
-
                 long end = System.currentTimeMillis();
+                Bukkit.getServer().getPluginManager().callEvent(new ArenaResetEvent(this, end - start, schematic.size));
                 NanoArenas.get().getLogger().info("Reset arena " + this.getName() + " in " + (end - start) + "ms");
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
+                NanoArenas.get().getLogger().info("Failed to reset arena " + this.getName() + ". Is the schematic file missing or corrupted?");
             }
         } else {
             NanoArenas.get().getLogger().info("Arena " + this.getName() + " is not setup correctly. Cannot reset.");

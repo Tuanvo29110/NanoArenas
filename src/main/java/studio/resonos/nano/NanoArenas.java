@@ -8,7 +8,9 @@ import org.bukkit.scheduler.BukkitRunnable;
 import studio.resonos.nano.api.command.CommandHandler;
 import studio.resonos.nano.api.gui.SpiGUI;
 import studio.resonos.nano.core.arena.Arena;
+import studio.resonos.nano.core.arena.listener.ArenaResetBroadcastListener;
 import studio.resonos.nano.core.arena.schedule.ArenaResetScheduler;
+import studio.resonos.nano.core.managers.AdminAlertManager;
 import studio.resonos.nano.core.util.CC;
 import studio.resonos.nano.core.util.Config;
 import studio.resonos.nano.core.util.file.type.BasicConfigurationFile;
@@ -36,6 +38,7 @@ public class NanoArenas extends JavaPlugin {
         return nanoArenas;
     }
     private ArenaResetScheduler resetScheduler;
+    private AdminAlertManager manager;
 
     @Override
     public void onEnable() {
@@ -48,7 +51,9 @@ public class NanoArenas extends JavaPlugin {
         nanoArenas = this;
         arenasConfig = new BasicConfigurationFile(this, "arenas");
         spiGUI = new SpiGUI(this);
+        manager = new AdminAlertManager();
         Arena.init();
+        Bukkit.getServer().getPluginManager().registerEvents(new ArenaResetBroadcastListener(manager), this);
         resetScheduler = new ArenaResetScheduler(this);
         registerProcessors();
         registerCommands();
