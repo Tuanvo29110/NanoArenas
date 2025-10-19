@@ -6,10 +6,14 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import studio.resonos.nano.api.command.CommandHandler;
+import studio.resonos.nano.api.command.processors.ArenaProcessor;
 import studio.resonos.nano.api.gui.SpiGUI;
 import studio.resonos.nano.core.arena.Arena;
 import studio.resonos.nano.core.arena.listener.ArenaResetBroadcastListener;
 import studio.resonos.nano.core.arena.schedule.ArenaResetScheduler;
+import studio.resonos.nano.core.commands.arena.*;
+import studio.resonos.nano.core.commands.dev.MigrateCommand;
+import studio.resonos.nano.core.commands.dev.NanoCommand;
 import studio.resonos.nano.core.managers.AdminAlertManager;
 import studio.resonos.nano.core.migrator.PlatinumArenasMigration;
 import studio.resonos.nano.core.util.CC;
@@ -43,10 +47,28 @@ public class NanoArenas extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        String str = """
+                  _   _          _   _  ____ \s
+                 | \\ | |   /\\   | \\ | |/ __ \\\s
+                 |  \\| |  /  \\  |  \\| | |  | |
+                 | . ` | / /\\ \\ | . ` | |  | |
+                 | |\\  |/ ____ \\| |\\  | |__| |
+                 |_| \\_/_/    \\_\\_| \\_|\\____/\s
+                
+                
+                """;
         Bukkit.getConsoleSender().sendMessage(CC.CHAT_BAR);
-        Bukkit.getConsoleSender().sendMessage(CC.translate(" &b&lNano Arenas"));
+        //Bukkit.getConsoleSender().sendMessage(CC.translate(" &b&lNano Arenas"));
+        Bukkit.getConsoleSender().sendMessage(CC.translate("&b  _   _          _   _  ____  "));
+        Bukkit.getConsoleSender().sendMessage(CC.translate("&b  | \\ | |   /\\   | \\ | |/ __ \\ "));
+        Bukkit.getConsoleSender().sendMessage(CC.translate("&b  |  \\| |  /  \\  |  \\| | |  | |"));
+        Bukkit.getConsoleSender().sendMessage(CC.translate("&b  | . ` | / /\\ \\ | . ` | |  | |"));
+        Bukkit.getConsoleSender().sendMessage(CC.translate("&b  | |\\  |/ ____ \\| |\\  | |__| |"));
+        Bukkit.getConsoleSender().sendMessage(CC.translate("&b  |_| \\_/_/    \\_\\_| \\_|\\____/ "));
+        Bukkit.getConsoleSender().sendMessage(CC.translate("&b "));
+        Bukkit.getConsoleSender().sendMessage(CC.translate((" &b▐ &fAuthor&7: &bAthishh")));
+        Bukkit.getConsoleSender().sendMessage(CC.translate((" &b▐ &fVersion &7: &b" + getDescription().getVersion())));
         Bukkit.getConsoleSender().sendMessage(CC.translate(" "));
-        Bukkit.getConsoleSender().sendMessage(CC.translate(" &aSuccessfully authenticated with the License Server!"));
         Bukkit.getConsoleSender().sendMessage(CC.translate(" &aThank you for purchasing Nano Arenas!"));
         Bukkit.getConsoleSender().sendMessage(CC.CHAT_BAR);
         nanoArenas = this;
@@ -81,13 +103,40 @@ public class NanoArenas extends JavaPlugin {
     }
 
     private void registerProcessors() {
-        CommandHandler.registerProcessors("studio.resonos.nano.api.command.processors", this);
+        //CommandHandler.registerProcessors("studio.resonos.nano.api.command.processors", this);
+        new ArenaProcessor();
     }
 
     private void registerCommands() {
-        CommandHandler.registerCommands("studio.resonos.nano.core.commands.arena", this);
+        //CommandHandler.registerCommands("studio.resonos.nano.core.commands.arena", this);
+        Class<?>[] commandClasses = {
+                AlertsCommand.class,
+                ArenaCommand.class,
+                ArenaCreateCommand.class,
+                ArenaDeleteCommand.class,
+                ArenaInfoCommand.class,
+                ArenaManageCommand.class,
+                ArenaPauseResetCommand.class,
+                ArenaResetCommand.class,
+                ArenaResetTimeCommand.class,
+                ArenaSaveCommand.class,
+                ArenasCommand.class,
+                ArenaSetIconCommand.class,
+                ArenaTeleportCommand.class,
+                MigrateCommand.class,
+                NanoCommand.class
+        };
+
+        for (Class<?> cmdClass : commandClasses) {
+            registerCommand(cmdClass);
+        }
+
         CommandHandler.registerCommands("studio.resonos.nano.core.commands.dev", this);
-        System.out.println("Registered Commands");
     }
+
+    private void registerCommand(Class<?> cmd) {
+        CommandHandler.registerCommands(cmd);
+    }
+
 
 }
