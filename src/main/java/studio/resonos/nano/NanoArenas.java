@@ -103,40 +103,12 @@ public class NanoArenas extends JavaPlugin {
     }
 
     private void registerProcessors() {
-        //CommandHandler.registerProcessors("studio.resonos.nano.api.command.processors", this);
-        new ArenaProcessor();
+        CommandHandler.registerProcessors("studio.resonos.nano.api.command.processors", this);
     }
 
     private void registerCommands() {
-        //CommandHandler.registerCommands("studio.resonos.nano.core.commands.arena", this);
-        Class<?>[] commandClasses = {
-                AlertsCommand.class,
-                ArenaCommand.class,
-                ArenaCreateCommand.class,
-                ArenaDeleteCommand.class,
-                ArenaInfoCommand.class,
-                ArenaManageCommand.class,
-                ArenaPauseResetCommand.class,
-                ArenaResetCommand.class,
-                ArenaResetTimeCommand.class,
-                ArenaSaveCommand.class,
-                ArenasCommand.class,
-                ArenaSetIconCommand.class,
-                ArenaTeleportCommand.class,
-                MigrateCommand.class,
-                NanoCommand.class
-        };
-
-        for (Class<?> cmdClass : commandClasses) {
-            registerCommand(cmdClass);
-        }
-
+        CommandHandler.registerCommands("studio.resonos.nano.core.commands.arena", this);
         CommandHandler.registerCommands("studio.resonos.nano.core.commands.dev", this);
     }
-
-    private void registerCommand(Class<?> cmd) {
-        CommandHandler.registerCommands(cmd);
-    }
-
 
 }
