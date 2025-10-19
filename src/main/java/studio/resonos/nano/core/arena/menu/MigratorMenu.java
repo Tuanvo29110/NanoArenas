@@ -7,9 +7,12 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import studio.resonos.nano.NanoArenas;
 import studio.resonos.nano.api.gui.buttons.SGButton;
 import studio.resonos.nano.api.gui.menu.SGMenu;
+import studio.resonos.nano.core.arena.Arena;
 import studio.resonos.nano.core.migrator.PlatinumArenasMigration;
 import studio.resonos.nano.core.util.CC;
 import studio.resonos.nano.core.util.ItemBuilder;
+
+import java.util.List;
 
 /**
  * @Author: Athishh
@@ -42,7 +45,8 @@ public class MigratorMenu {
 
             player.sendMessage(CC.translate("&8(&b❀&8) &aMigrating from &ePlatinumArenas..."));
             player.sendMessage(CC.translate("&8(&b❀&8) &eThis may take a while depending on size and number of arenas you have."));
-            PlatinumArenasMigration.migrateFromPlatinumArenas();
+            PlatinumArenasMigration.migrateFromPlatinumArenas(player);
+
         }));
 
         player.openInventory(menu.getInventory());
