@@ -109,7 +109,7 @@ public class PlatinumArenasMigration {
         executor.shutdown();
 
         // Defer expensive schematic creation to async batch operation
-        Bukkit.getScheduler().runTaskAsynchronously(NanoArenas.get(), () -> {
+        NanoArenas.getScheduler().runAsync(task -> {
             for (Arena arena : migratedArenas) {
                 try {
                     arena.createSchematic();
@@ -121,7 +121,7 @@ public class PlatinumArenasMigration {
         });
 
         // Schedule arenas on main thread (Bukkit requirement)
-        Bukkit.getScheduler().runTask(NanoArenas.get(), () -> {
+        NanoArenas.getScheduler().runNextTick(task -> {
             for (Arena arena : migratedArenas) {
                 NanoArenas.get().getResetScheduler().schedule(arena);
             }
@@ -144,7 +144,7 @@ public class PlatinumArenasMigration {
     private static void sendMessage(CommandSender sender, String message) {
         String translatedMessage = CC.translate(message);
         // Thread-safe console logging
-        Bukkit.getScheduler().runTask(NanoArenas.get(), () -> {
+        NanoArenas.getScheduler().runNextTick(task -> {
             Bukkit.getConsoleSender().sendMessage(translatedMessage);
             if (sender != null) {
                 sender.sendMessage(translatedMessage);

@@ -246,11 +246,11 @@ public class Arena extends Cuboid {
                 for (Entity entity : getWorld().getEntities()) {
                     if (entity.getLocation().toVector().isInAABB(getLowerCorner().toVector(), getUpperCorner().toVector())) {
                         if (entity instanceof org.bukkit.entity.Player) {
-                            if (spawn != null) entity.teleport(spawn);
+                            if (spawn != null) entity.teleportAsync(spawn);
                         }else if (entity instanceof Item || entity instanceof Projectile || entity instanceof EnderCrystal
                                 || entity instanceof Minecart || entity instanceof Boat ||
                                 entity instanceof FallingBlock || entity instanceof ExplosiveMinecart) {
-                            entity.remove();
+                            NanoArenas.getScheduler().runAtEntity(entity, task -> entity.remove());
                         }
                     }
                 }
@@ -264,7 +264,7 @@ public class Arena extends Cuboid {
                     Schematic schematic = getSchematic();
                     schematic.paste(getWorld(), getUpperX(), getUpperY(), getUpperZ());
                     long end = System.currentTimeMillis();
-                    Bukkit.getServer().getScheduler().runTask(NanoArenas.get(), () -> {
+                    NanoArenas.getScheduler().runNextTick(task -> {
                         Bukkit.getServer().getPluginManager().callEvent(new ArenaResetEvent(this, end - start, schematic.size));
                     });
                     Bukkit.getConsoleSender().sendMessage(CC.translate("&8[&bNanoArenas&8] &aReset arena " + this.getName() + " in " + (end - start) + "ms"));

@@ -60,7 +60,7 @@ public class MenuListener implements Listener {
                 }
 
                 if (event.isCancelled()) {
-                    Bukkit.getScheduler().runTaskLater(NanoArenas.get(), player::updateInventory, 1L);
+                    NanoArenas.getScheduler().runAtEntityLater(player, task -> player.updateInventory(), 1L);
                 }
             } else {
                 if (event.getCurrentItem() != null) {

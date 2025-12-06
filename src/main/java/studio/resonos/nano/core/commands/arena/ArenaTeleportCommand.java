@@ -18,8 +18,11 @@ public class ArenaTeleportCommand {
         if (arena == null) {
             sender.sendMessage(CC.translate("&8[&bNanoArenas&8] &cAn arena with that name does not exist."));
         } else {
-            sender.teleport(arena.getUpperCorner());
-            sender.sendMessage(CC.translate("&8[&bNanoArenas&8] &aYou have been teleported to Arena " + arena.getName()));
+            sender.teleportAsync(arena.getUpperCorner()).thenAccept(success -> {
+                if (success) {
+                    sender.sendMessage(CC.translate("&8[&bNanoArenas&8] &aYou have been teleported to Arena " + arena.getName()));
+                }
+            });
         }
     }
 }

@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
 import studio.resonos.nano.api.command.CommandHandler;
 import studio.resonos.nano.api.gui.SpiGUI;
 import studio.resonos.nano.core.arena.Arena;
@@ -15,6 +14,9 @@ import studio.resonos.nano.core.util.CC;
 import studio.resonos.nano.core.util.Config;
 import studio.resonos.nano.core.util.file.type.BasicConfigurationFile;
 
+import com.tcoded.folialib.FoliaLib;
+import com.tcoded.folialib.impl.PlatformScheduler;
+
 /**
  * @Author Athulsib
  * Package: studio.resonos.arenas.core.arena.generator
@@ -24,9 +26,10 @@ import studio.resonos.nano.core.util.file.type.BasicConfigurationFile;
 @Getter
 @Setter
 public class NanoArenas extends JavaPlugin {
-
+    
     public static SpiGUI spiGUI;
     private static NanoArenas nanoArenas;
+    private static FoliaLib foliaLib;
     @Getter
     private BasicConfigurationFile arenasConfig;
     public Config mainConfig;
@@ -39,6 +42,8 @@ public class NanoArenas extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        foliaLib = new FoliaLib(this);
+
         String str = """
                   _   _          _   _  ____ \s
                  | \\ | |   /\\   | \\ | |/ __ \\\s
@@ -73,14 +78,6 @@ public class NanoArenas extends JavaPlugin {
         resetScheduler = new ArenaResetScheduler(this);
         registerProcessors();
         registerCommands();
-        // schedule a short delayed startup pass to allow arenas to load first
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                NanoArenas.get().getLogger().info("Started Reset timer Task");
-                resetScheduler.scheduleAll();
-            }
-        }.runTaskLater(this, 10 * 20L);
     }
 
 
@@ -102,6 +99,10 @@ public class NanoArenas extends JavaPlugin {
     private void registerCommands() {
         CommandHandler.registerCommands("studio.resonos.nano.core.commands.arena", this);
         CommandHandler.registerCommands("studio.resonos.nano.core.commands.dev", this);
+    }
+
+    public static PlatformScheduler getScheduler() {
+        return foliaLib.getScheduler();
     }
 
 }
