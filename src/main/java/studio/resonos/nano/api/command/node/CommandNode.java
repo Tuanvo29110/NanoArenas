@@ -252,7 +252,7 @@ public class CommandNode {
         for (int i = 0; i < difference; i++) objects.add(null);
 
         if (async) {
-            Bukkit.getScheduler().runTaskAsynchronously(CommandHandler.getPlugin(), () -> {
+            Bukkit.getAsyncScheduler().runNow(CommandHandler.getPlugin(), task -> {
                 try {
                     method.invoke(parentClass, objects.toArray());
                 } catch (Exception exception) {

@@ -23,7 +23,7 @@ public class ArenaPauseResetCommand {
             boolean next = !arena.isAutoResetPaused();
             arena.setAutoResetPaused(next);
             arena.save();
-            NanoArenas.get().getResetScheduler().schedule(arena);
+            //NanoArenas.get().getResetScheduler().schedule(arena);
             sender.sendMessage(CC.translate("&8[&bNanoArenas&8] " + (next ? "&aAuto-resets paused for arena " + arena.getName() + "."
                     : "&bAuto-resets resumed for arena " + arena.getName() + ".")));
             return;
@@ -32,7 +32,7 @@ public class ArenaPauseResetCommand {
         if (action.equalsIgnoreCase("on")) {
             arena.setAutoResetPaused(true);
             arena.save();
-            NanoArenas.get().getResetScheduler().schedule(arena);
+            //NanoArenas.get().getResetScheduler().schedule(arena);
             sender.sendMessage(CC.translate("&8[&bNanoArenas&8] &cAuto-resets paused for arena " + arena.getName() + "."));
             return;
         }
@@ -40,7 +40,7 @@ public class ArenaPauseResetCommand {
         if (action.equalsIgnoreCase("off")) {
             arena.setAutoResetPaused(false);
             arena.save();
-            NanoArenas.get().getResetScheduler().schedule(arena);
+            //NanoArenas.get().getResetScheduler().schedule(arena);
             sender.sendMessage(CC.translate("&8[&bNanoArenas&8] &aAuto-resets resumed for arena " + arena.getName() + "."));
             return;
         }
