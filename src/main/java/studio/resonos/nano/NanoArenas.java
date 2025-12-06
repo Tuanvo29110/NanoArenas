@@ -93,10 +93,10 @@ public class NanoArenas extends JavaPlugin {
         // cancel scheduler tasks
         /*if (resetScheduler != null) {
             resetScheduler.cancelAll();
-        };*/
+        };
 
         Arena.getArenas().forEach(Arena::reset);
-        Arena.getArenas().forEach(Arena::save);
+        Arena.getArenas().forEach(Arena::save);*/
     }
 
     private void registerProcessors() {
