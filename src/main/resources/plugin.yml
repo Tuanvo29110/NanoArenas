@@ -6,5 +6,7 @@ authors:
   - Athulsib
 depend:
   - FastAsyncWorldEdit
+softdepend:
+  - MoreFoWorld  
 description: Fast asynchronous arena system. Developed by Resonos Studios.
 folia-supported: true
