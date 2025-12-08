@@ -89,7 +89,15 @@ public class Arena extends Cuboid {
 
                 Location location1 = LocationUtil.deserialize(configuration.getString(path + ".cuboid.location1"));
                 Location location2 = LocationUtil.deserialize(configuration.getString(path + ".cuboid.location2"));
-
+                
+                // ======= CHECK NULL =======
+                if (location1 == null || location2 == null) {
+                    NanoArenas.get().getLogger().severe(
+                            "Arena '" + arenaName + "' is missing location1 or location2! Skipping..."
+                    );
+                    continue;
+                }
+                
                 Arena arena;
 
                 arena = new StandaloneArena(arenaName, location1, location2);
