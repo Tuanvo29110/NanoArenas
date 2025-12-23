@@ -1,5 +1,6 @@
 package studio.resonos.nano.core.arena;
 
+import com.fastasyncworldedit.core.FaweAPI;
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
@@ -34,9 +35,7 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
 
 public class Arena extends Cuboid {
 
@@ -61,23 +60,17 @@ public class Arena extends Cuboid {
     @Getter
     @Setter
     protected int resetTime = -1;
-
     @Getter
     @Setter
     private boolean autoResetPaused = false;
 
-    @Getter
-    private Schematic cachedSchematic;
-
-    // Thread-safe single-threaded executor for arena resets
     private static final ExecutorService RESET_EXECUTOR = Executors.newSingleThreadExecutor(r -> {
-        Thread t = new Thread(r, "Arena-Reset-Thread");
+        Thread t = new Thread(r, "Nano-Reset-Thread");
         t.setDaemon(true);
         return t;
     });
 
-    // Track ongoing reset tasks per arena to prevent concurrent resets
-    private static final java.util.concurrent.ConcurrentMap<String, Future<?>> resetTasks = new java.util.concurrent.ConcurrentHashMap<>();
+    private static final ConcurrentMap<String, Future<?>> resetTasks = new ConcurrentHashMap<>();
 
     /*
      * Default arena constructor
@@ -210,11 +203,18 @@ public class Arena extends Cuboid {
         BlockArrayClipboard clipboard = new BlockArrayClipboard(region);
         // set schematic paste point to spawnA inorder to continue working with current system
         clipboard.setOrigin(LocationUtil.locationToBlockVector(getUpperCorner()));
-        EditSession editSession = WorldEdit.getInstance().getEditSessionFactory().getEditSession(region.getWorld(), -1);
 
-        ForwardExtentCopy forwardExtentCopy = new ForwardExtentCopy(editSession, region, clipboard, region.getMinimumPoint());
-        forwardExtentCopy.setCopyingEntities(false);
-        Operations.complete(forwardExtentCopy);
+        try (EditSession editSession = WorldEdit.getInstance()
+                .getEditSessionFactory()
+                .getEditSession(region.getWorld(), -1)) {
+
+            ForwardExtentCopy forwardExtentCopy =
+                    new ForwardExtentCopy(editSession, region, clipboard, region.getMinimumPoint());
+
+            forwardExtentCopy.setCopyingEntities(false);
+            Operations.completeBlindly(forwardExtentCopy);
+        }
+
 
         // ensure schematics directory exists (creates parents as needed)
         File schematicsDir = new File(NanoArenas.get().getDataFolder(), "data" + File.separator + "arenas");
@@ -222,11 +222,10 @@ public class Arena extends Cuboid {
             schematicsDir.mkdirs();
         }
 
-        File file = new File(schematicsDir, getName() + ".nano");
+        File file = new File(schematicsDir, getName() + ".schem");
 
-        try (ClipboardWriter writer = BuiltInClipboardFormat.FAST.getWriter(Files.newOutputStream(file.toPath()))) {
+        try (ClipboardWriter writer = BuiltInClipboardFormat.FAST_V3.getWriter(Files.newOutputStream(file.toPath()))) {
             writer.write(clipboard);
-            cachedSchematic = null; // reset cached schematic to force reload next time
         } catch (IOException e) {
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Failed to save: " + getDisplayName());
             e.printStackTrace();
@@ -236,16 +235,11 @@ public class Arena extends Cuboid {
     }
 
     public File getSchematicFile() {
-        return new File(NanoArenas.get().getDataFolder(), "data" + File.separator + "arenas" + File.separator + getName() + ".nano");
+        return new File(NanoArenas.get().getDataFolder(), "data" + File.separator + "arenas" + File.separator + getName() + ".schem");
     }
 
     public Schematic getSchematic() throws IOException {
-        if (cachedSchematic != null) {
-            return cachedSchematic;
-        }
-
-        cachedSchematic = new Schematic(getSchematicFile());
-        return cachedSchematic;
+        return new Schematic(getSchematicFile());
     }
 
 
@@ -262,28 +256,25 @@ public class Arena extends Cuboid {
             return;
         }
 
-        // Submit reset task to single-threaded executor
+        for (Entity entity : getWorld().getEntities()) {
+            if (entity.getLocation().toVector().isInAABB(getLowerCorner().toVector(), getUpperCorner().toVector())) {
+                if (entity instanceof org.bukkit.entity.Player) {
+                    if (spawn != null) entity.teleport(spawn);
+                } else if (entity instanceof Item || entity instanceof Projectile || entity instanceof EnderCrystal
+                        || entity instanceof Minecart || entity instanceof Boat ||
+                        entity instanceof FallingBlock || entity instanceof ExplosiveMinecart) {
+                    entity.remove();
+                }
+            }
+        }
+
         Future<?> future = RESET_EXECUTOR.submit(() -> {
             try {
-                // Remove entities in the arena
-                for (Entity entity : getWorld().getEntities()) {
-                    if (entity.getLocation().toVector().isInAABB(getLowerCorner().toVector(), getUpperCorner().toVector())) {
-                        if (entity instanceof org.bukkit.entity.Player) {
-                            if (spawn != null) entity.teleport(spawn);
-                        } else if (entity instanceof Item || entity instanceof Projectile || entity instanceof EnderCrystal
-                                || entity instanceof Minecart || entity instanceof Boat ||
-                                entity instanceof FallingBlock || entity instanceof ExplosiveMinecart) {
-                            entity.remove();
-                        }
-                    }
-                }
-
                 long start = System.currentTimeMillis();
                 Schematic schematic = getSchematic();
                 schematic.paste(getWorld(), getUpperX(), getUpperY(), getUpperZ());
                 long end = System.currentTimeMillis();
 
-                // Fire event and send message on main thread
                 Bukkit.getServer().getScheduler().runTask(NanoArenas.get(), () -> {
                     Bukkit.getServer().getPluginManager().callEvent(new ArenaResetEvent(this, end - start, schematic.size));
                     Bukkit.getConsoleSender().sendMessage(CC.translate("&8[&bNanoArenas&8] &aReset arena " + this.getName() + " in " + (end - start) + "ms"));
@@ -292,12 +283,10 @@ public class Arena extends Cuboid {
                 e.printStackTrace();
                 Bukkit.getConsoleSender().sendMessage(CC.translate("&8[&bNanoArenas&8] &4Failed to reset arena &e" + this.getName() + ". &4Is the schematic file missing or corrupted?"));
             } finally {
-                // Clean up tracking map
                 resetTasks.remove(this.getName());
             }
         });
 
-        // Track this reset task
         resetTasks.put(this.getName(), future);
     }
 
