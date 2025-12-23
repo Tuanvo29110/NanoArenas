@@ -1,6 +1,5 @@
 package studio.resonos.nano.core.arena;
 
-import com.fastasyncworldedit.core.FaweAPI;
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
@@ -16,7 +15,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.BlockState;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.entity.minecart.ExplosiveMinecart;
@@ -36,6 +34,9 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class Arena extends Cuboid {
 
@@ -68,6 +69,15 @@ public class Arena extends Cuboid {
     @Getter
     private Schematic cachedSchematic;
 
+    // Thread-safe single-threaded executor for arena resets
+    private static final ExecutorService RESET_EXECUTOR = Executors.newSingleThreadExecutor(r -> {
+        Thread t = new Thread(r, "Arena-Reset-Thread");
+        t.setDaemon(true);
+        return t;
+    });
+
+    // Track ongoing reset tasks per arena to prevent concurrent resets
+    private static final java.util.concurrent.ConcurrentMap<String, Future<?>> resetTasks = new java.util.concurrent.ConcurrentHashMap<>();
 
     /*
      * Default arena constructor
@@ -240,42 +250,55 @@ public class Arena extends Cuboid {
 
 
     public void reset() {
-        if (isSetup()) {
-           // if (spawn != null) {
+        if (!isSetup()) {
+            Bukkit.getConsoleSender().sendMessage(CC.translate("&8[&bNanoArenas&8] &cArena " + this.getName() + " is not setup correctly. Cannot reset."));
+            return;
+        }
+
+        // Check if a reset is already in progress for this arena
+        Future<?> existing = resetTasks.get(this.getName());
+        if (existing != null && !existing.isDone()) {
+            Bukkit.getConsoleSender().sendMessage(CC.translate("&8[&bNanoArenas&8] &eArena " + this.getName() + " is already being reset. Please wait."));
+            return;
+        }
+
+        // Submit reset task to single-threaded executor
+        Future<?> future = RESET_EXECUTOR.submit(() -> {
+            try {
                 // Remove entities in the arena
                 for (Entity entity : getWorld().getEntities()) {
                     if (entity.getLocation().toVector().isInAABB(getLowerCorner().toVector(), getUpperCorner().toVector())) {
                         if (entity instanceof org.bukkit.entity.Player) {
                             if (spawn != null) entity.teleport(spawn);
-                        }else if (entity instanceof Item || entity instanceof Projectile || entity instanceof EnderCrystal
+                        } else if (entity instanceof Item || entity instanceof Projectile || entity instanceof EnderCrystal
                                 || entity instanceof Minecart || entity instanceof Boat ||
                                 entity instanceof FallingBlock || entity instanceof ExplosiveMinecart) {
                             entity.remove();
                         }
                     }
                 }
-            //}
 
-            FaweAPI.getTaskManager().async(() -> {
-            try {
-            
-                    long start = System.currentTimeMillis();
+                long start = System.currentTimeMillis();
+                Schematic schematic = getSchematic();
+                schematic.paste(getWorld(), getUpperX(), getUpperY(), getUpperZ());
+                long end = System.currentTimeMillis();
 
-                    Schematic schematic = getSchematic();
-                    schematic.paste(getWorld(), getUpperX(), getUpperY(), getUpperZ());
-                    long end = System.currentTimeMillis();
-                    Bukkit.getServer().getScheduler().runTask(NanoArenas.get(), () -> {
-                        Bukkit.getServer().getPluginManager().callEvent(new ArenaResetEvent(this, end - start, schematic.size));
-                    });
+                // Fire event and send message on main thread
+                Bukkit.getServer().getScheduler().runTask(NanoArenas.get(), () -> {
+                    Bukkit.getServer().getPluginManager().callEvent(new ArenaResetEvent(this, end - start, schematic.size));
                     Bukkit.getConsoleSender().sendMessage(CC.translate("&8[&bNanoArenas&8] &aReset arena " + this.getName() + " in " + (end - start) + "ms"));
+                });
             } catch (Exception e) {
                 e.printStackTrace();
                 Bukkit.getConsoleSender().sendMessage(CC.translate("&8[&bNanoArenas&8] &4Failed to reset arena &e" + this.getName() + ". &4Is the schematic file missing or corrupted?"));
-            }});
-        } else {
-            Bukkit.getConsoleSender().sendMessage(CC.translate("&8[&bNanoArenas&8] &cArena " + this.getName() + " is not setup correctly. Cannot reset."));
-        }
+            } finally {
+                // Clean up tracking map
+                resetTasks.remove(this.getName());
+            }
+        });
 
+        // Track this reset task
+        resetTasks.put(this.getName(), future);
     }
 
 }
