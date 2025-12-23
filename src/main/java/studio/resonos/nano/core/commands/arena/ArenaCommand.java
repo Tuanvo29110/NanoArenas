@@ -22,6 +22,9 @@ public class ArenaCommand {
         sender.sendMessage(CC.translate(" &7⚙ &b/arena setspawn &8<&7arena&8>"));
         sender.sendMessage(CC.translate(" &7⚙ &b/arena teleport &8<&7arena&8>"));
         sender.sendMessage(CC.translate(" &7⚙ &b/arena seticon &8<&7arena&8>"));
+        sender.sendMessage(CC.translate(" &7⚙ &b/arena reset &8<&7arena&8>"));
+        sender.sendMessage(CC.translate(" &7⚙ &b/arena pause &8<&7arena&8>"));
+        sender.sendMessage(CC.translate(" &7⚙ &b/arena resetdelay &8<&7arena&8> &8<&7seconds&8>"));
         sender.sendMessage(CC.translate(" &7⚙ &b/arena manage"));
         sender.sendMessage(CC.translate(" &7⚙ &b/arena save"));
         sender.sendMessage(CC.translate(" &7⚙ &b/arenas"));
